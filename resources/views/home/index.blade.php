@@ -119,23 +119,28 @@ Sepatu Bordir.id | Home
             </div>
             <div class="card bg-light mb-3">
                 <div class="card-header bg-success text-white text-uppercase">Produk Terbaru</div>
+                @if(!$products->isEmpty())
                 <div class="card-body">
                     <img class="img-fluid" src="https://cdn.pixabay.com/photo/2013/07/12/19/21/pumps-154636_960_720.png" />
+                    
                     <h5 class="card-title">{{$products[0]->productName}}</h5>
                     <p class="card-text">{{$products[0]->description}}</p>
                     <p class="bloc_left_price">Rp. {{number_format($products[0]->price, 2, '.', ',')}}</p>
+                   
                 </div>
+                @endif
             </div>
         </div>
         <div class="col">
             <div class="row">
             	<!-- Start product counting -->
+              
             	@foreach($products as $product)
                 <div class="col-12 col-md-6 col-lg-4">
                     <div class="card">
                         <img class="card-img-top" src="https://cdn.pixabay.com/photo/2013/07/12/19/21/pumps-154636_960_720.png" alt="Card image cap">
                         <div class="card-body">
-                            <h4 class="card-title"><a href="product.html" title="View Product">{{$product->productName}}</a></h4>
+                            <h4 class="card-title"><a href="/home/product/{{$product->productId}}" title="View Product">{{$product->productName}}</a></h4>
                             <p class="card-text">{{$product->description}}</p>
                             <div class="row">
                                 <div class="col">
@@ -149,8 +154,15 @@ Sepatu Bordir.id | Home
                     </div>
                 </div>
                 @endforeach
+                @if($products->isEmpty())
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card">
+                        <h1>Kosong</h1>
+                    </div>
+                </div>
+                @endif
                 <!-- End product counting -->
-
+                @if(!$products->isEmpty())
                 <div class="col-12">
                     <nav aria-label="...">
                         <ul class="pagination">
@@ -168,6 +180,7 @@ Sepatu Bordir.id | Home
                         </ul>
                     </nav>
                 </div>
+                @endif
             </div>
         </div>
 

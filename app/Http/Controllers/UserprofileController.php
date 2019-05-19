@@ -15,7 +15,9 @@ class UserprofileController extends Controller
     	{
             if(session('user')->type=='user'){
             $orders = DB::table('orders')
-                    ->where('id', session('user')->id)
+                    ->where('namaCustomer',session('user')->username)
+                    ->groupBy('idPemesanan')
+                    ->orderBy('idPemesanan','desc')
                     ->get();
 
     		return view('userprofile.index', ['orders' => $orders]);

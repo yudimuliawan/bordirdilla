@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Cart;
 use App\Checkout;
+use App\Http\Controllers\Controller;
+use Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
 
 class CheckoutController extends Controller
 {
@@ -39,36 +39,48 @@ class CheckoutController extends Controller
      */
     public function store(Request $request)
     {
-        if(Cart::Content()->count()!=null){
-        $orderId = DB::table('orders')
-            ->insertGetId(['id'=> session('user')->id]);
+        
+        if (Cart::Content()->count() != null) {
+            // $orderId = DB::table('orders')
+            //     ->insertGetId(['id'=> session('user')->id]);
 
-        $cartProducts = Cart::content();
+            $cartProducts = Cart::content();
+            date_default_timezone_set("Asia/Bangkok");
+            $tgl = date('y-m-d');
+            $data = array();
+            $rdm = substr(str_shuffle('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZqwertyuiopasdfghjklzxcvbnm'), 1, 8);
+            $det = date('dmYHis');
+            $aidi = $det . $rdm;
+            $jenis= $request->metode;
+            $params = array();
+            foreach ($cartProducts as $cp) {
+                $params[] = [
+                    'productId' => $cp->id,
+                    'idPemesanan' => $aidi,
+                    'productName' => $cp->name,
+                    'price' => $cp->price,
+                    'quantity' => $cp->qty,
+                    'size' => $cp->options->size,
+                    'tanggal' => $tgl,
+                    'totalPrice' => $cp->subtotal,
+                    'jenis'=>$jenis,
+                    'namaCustomer' => session('user')->username,
+                    // 'jenis'->$request->metode
 
-        foreach($cartProducts as $cp)
-        {
-            $params=[
-                'productId'=>$cp->id,
-                // 'productname'=>$cp->name,
-                'orderId'=>$orderId,
-                // 'username'=>$request->name,
-                'qn'=>$cp->qty
-                // 'price'=>$cp->subtotal,
-                // 'phonenumber'=>$request->phone_number,
-                // 'address'=>$request->address,
-                // 'zipcode'=>$request->zip_code
-            ];
-            DB::table('checkouts')
-                ->insert($params);
+                ];
 
-            Cart::remove($cp->rowId);
+                Cart::remove($cp->rowId);
+
+                // Cart::remove($cp->rowId);
+            }
+
+            DB::table('orders')->insert($params);
+
+            return view('checkout.thanks');
+        } else {
+            $cartProducts = Cart::content();
+            return view('cart.index', ['cartProducts' => $cartProducts]);
         }
-
-        return view('checkout.thanks');
-    }else{
-        $cartProducts = Cart::content();
-        return view('cart.index', ['cartProducts'=>$cartProducts]);
-    }
     }
 
     /**

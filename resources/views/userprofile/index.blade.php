@@ -59,24 +59,23 @@ Sepatu Bordir.id | Index
                   <thead>
                     <tr>
                       <th>Order ID</th>
-                      <!-- <th>Option</th>
-                      <th>Prodotti utilizzati</th>
-                      <th>Colori utilizzati</th>
-                      <th>Note</th> -->
+                      <th>Tanggal</th>
+                      <th>Status</th>
+                  
                       <th>Option</th>
                     </tr>
                   </thead>
                   <tbody id="items">
+                    
                     @foreach($orders as $order)
+                   
                     <tr data-toggle="collapse" data-target="#demo1" class="accordion-toggle ">
-                      <td>{{$order->orderId}}</td>
-                      <!-- <td>MASSAGGIO schiena</td>
-                      <td>usato loreal</td>
-                      <td>colore rosso</td> -->
-                      <!-- <td>il cliente preferisce il verde</td> -->
-                      <!-- <td><button type="button" data-toggle="modal" data-target="#edit" data-uid="1" class="update btn btn-warning btn-sm"><span class="glyphicon glyphicon-pencil"></span></button></td> -->
-                      <td><a style="text-decoration: none;" href="/order/{{$order->orderId}}">Details <button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open"></span></button></a></td>
+                      <td>{{$order->idPemesanan}}</td>
+                      <td>{{$order->tanggal}}</td>
+                      <td>{{$order->status}}</td>
+                      <td><a style="text-decoration: none;" href="/detailpesanan/{{$order->idPemesanan}}">Details <button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open"></span></button></a></td>
                     </tr>
+                   
                     @endforeach
                     <tr>
             <td colspan="12" class="hiddenRow"><div class="accordian-body collapse" id="demo1"> 

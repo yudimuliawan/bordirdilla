@@ -28,7 +28,8 @@ class CartController extends Controller
             'id'=>$productId,
             'name'=>$productDetails->productName,
             'price'=>$productDetails->price,
-            'qty'=>$request->quantity
+            'qty'=>$request->quantity,
+            'options'=>['size'=>$request->ukuran]
         ]);
 
       // return Cart::Content();

@@ -96,7 +96,7 @@ Sepatu Bordir.id| Add to Cart
                         <tr>
                             <th scope="col"> </th>
                             <th scope="col">Produk</th>
-                            
+                            <th scope="col">Ukuran</th>
                             <th scope="col" class="text-center">Jumlah</th>
                             <th scope="col" class="text-right">Harga</th>
                             <th> </th>
@@ -111,7 +111,7 @@ Sepatu Bordir.id| Add to Cart
                         <tr>
                             <td><img src="https://dummyimage.com/50x50/55595c/fff" /> </td>
                             <td>{{$cp->name}}</td>
-                          
+                            <td>{{$cp->options['size']}}</td>
                             <td><input class="form-control" type="text" value="{{$cp->qty}}" /></td>
                             <td class="text-right">Rp. {{$cp->subtotal}}</td>
                             <td class="text-right"><a href="{{ url('/delete-cart/'.$cp->rowId)}}" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> </a> </td>

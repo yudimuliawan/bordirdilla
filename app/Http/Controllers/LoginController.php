@@ -14,8 +14,12 @@ class LoginController extends Controller
             if(session('user')->type=='admin')
             {
                 return redirect()->route('admin.index');
-            }else{
+            }else if(session('user')->type=='user'){
                 return redirect()->route('userprofile.show');
+            }else if(session('user')->type=='accounting'){
+                return redirect()->route('accounting.index');
+            }else if(session('user')->type=='marketing'){
+                return redirect()->route('marketing.index');
             }
         }else{
             return view('login.index');
@@ -45,6 +49,20 @@ class LoginController extends Controller
                 $request->session()->put('admin', $user);
                 // session('user', $user);
                 return redirect()->route('admin.index');
+            }
+            if($user->type=='accounting')
+            {
+                $request->session()->put('user', $user);
+                $request->session()->put('admin', $user);
+                // session('user', $user);
+                return redirect()->route('accounting.index');
+            }
+            if($user->type=='marketing')
+            {
+                $request->session()->put('user', $user);
+                $request->session()->put('admin', $user);
+                // session('user', $user);
+                return redirect()->route('marketing.index');
             }
         }
     	else

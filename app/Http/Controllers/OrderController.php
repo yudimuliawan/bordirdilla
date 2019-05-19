@@ -8,6 +8,7 @@ use App\Checkout;
 use App\product;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 
 class OrderController extends Controller
@@ -117,4 +118,24 @@ class OrderController extends Controller
     {
         //
     }
+
+
+    public function showHistoryDetail($id){
+        $rs = DB::table('orders')->where('idPemesanan',$id)->get();
+        return view('order.historyDetails',['detail'=>$rs]);
+    }
+
+    public function uploadBuktiBayar(Request $req){
+        $id =$req->idPemesanan;
+        $path = $req->file('buktiPembayaran')->store('public/image/bukti');
+        $path = str_replace('public','storage',$path);
+        $dataUpdate = [
+            'status'=>'Menunggu Konfirmasi',
+            'buktiPembayaran'=>$path
+        ];
+        DB::table('orders')->where('idPemesanan',$id)->update($dataUpdate);
+        return redirect('/profile');
+    }
+
+
 }
