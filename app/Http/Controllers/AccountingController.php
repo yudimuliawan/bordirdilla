@@ -51,4 +51,6 @@ class AccountingController extends Controller
         ->get();
         return view('admin.accounting.detailTagihan',['detail'=>$rs]);
     }
+
+    
 }

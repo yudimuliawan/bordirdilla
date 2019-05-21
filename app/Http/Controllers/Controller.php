@@ -11,5 +11,5 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public $url = 'http://bordir.cut/bangsuy';
+    public $url = 'http://bordir.cut/';
 }

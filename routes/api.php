@@ -19,3 +19,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/testapi', 'LogoutController@testapi');
 Route::post('/ambil/{param}', 'LogoutController@ambil');
+
+Route::get('/produksi/getorders', 'OrderController@apiGetOrder');
+Route::get('/produksi/order/detail/{id}', 'OrderController@apiOrderDetail');

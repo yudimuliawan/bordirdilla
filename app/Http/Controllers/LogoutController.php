@@ -14,13 +14,14 @@ class LogoutController extends Controller
     }
 
     public function testapi(){
-        // $client = new \GuzzleHttp\Client();
-        // $response = $client->request('GET', 'https://api.github.com/repos/guzzle/guzzle');
-        // echo $response->getBody();
+        $client = new \GuzzleHttp\Client();
+        $response = $client->request('GET', config('app.cut_url').'/api/test/coba')->getBody();
+        echo $response;
+
+        
+
 
        
-        $rs = $this->url;
-        echo $rs;
     }
 
     public function ambil(Request $request){

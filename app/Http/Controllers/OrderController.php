@@ -138,4 +138,31 @@ class OrderController extends Controller
     }
 
 
+    public function apiGetOrder(){
+        $rs = DB::table('orders')->where('status','Proses pembuatan')
+        ->groupBy('idPemesanan')
+        ->orderBy('idPemesanan','desc')
+        ->get();
+        return response()->json($rs);
+
+    }
+
+    public function apiOrderDetail($id){
+        // $rs = DB::table('orders')->where('idPemesanan',$id)
+        // ->orderBy('productName','asc')
+        // ->orderBy('size','asc')
+        // ->get();
+
+        $rs = DB::table('orders')
+        // ->select('productName','size','quantity','totalPrice',DB::raw("(select category from categories where categoryId=(select categoryId from products where products.productName=orders.productName) as category "))
+        ->select('idPemesanan','productName','size','quantity','totalPrice',DB::raw("(select category from categories where categoryId = (select categoryId from products where orders.productName=products.productName) ) as category "))
+        ->where('idPemesanan',$id)
+        ->orderBy('productName','asc')
+        ->orderBy('size','asc')
+        ->get();
+
+        return response()->json($rs);
+    }
+
+
 }

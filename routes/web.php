@@ -94,6 +94,8 @@ Route::post('/registration', 'RegistrationController@store');
 
 Route::get('/logout', 'LogoutController@index');
 
+Route::get('/tesss', 'LogoutController@testapi');
+
 //Route::get('/home', 'HomeController@index')->middleware('sess');
 
 //Route::resource('/supplier', 'SupplierController');
