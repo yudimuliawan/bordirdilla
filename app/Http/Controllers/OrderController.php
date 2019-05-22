@@ -139,7 +139,7 @@ class OrderController extends Controller
 
 
     public function apiGetOrder(){
-        $rs = DB::table('orders')->where('status','Proses pembuatan')
+        $rs = DB::table('orders')->where('status','Menunggu di produksi')
         ->groupBy('idPemesanan')
         ->orderBy('idPemesanan','desc')
         ->get();
@@ -164,5 +164,25 @@ class OrderController extends Controller
         return response()->json($rs);
     }
 
+    public function apiUpdateWait($id){
+        DB::table('orders')->where('idPemesanan',$id)->update(['status'=>'Proses pembuatan']);
+        return response()->json(['status'=>'success']);
+    }
+
+    public function apiGetProsesPembuatanList(Request $req){
+        $list = $req->list;
+        $rs = DB::table('orders')->select('idPemesanan','tanggal')
+        ->whereIn('idPemesanan',$list)
+        ->where('status','Proses pembuatan')
+        ->groupBy('idPemesanan')
+        ->orderBy('idPemesanan','desc')->get();
+
+        return response()->json($rs);
+    }
+    
+    public function apiUpdateDone($id){
+        DB::table('orders')->where('idPemesanan',$id)->update(['status'=>'Menunggu Pengiriman']);
+        return response()->json(['status'=>'success']);
+    }
 
 }

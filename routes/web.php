@@ -34,7 +34,10 @@ Route::group(['middleware' => ['Adminsess']], function () {
 	Route::get('/marketing/pengadaan/{city}', 'MarketingController@showByCity');
 	Route::get('/marketing/pengadaan/{city}/{id}', 'MarketingController@detailOrder');
 	Route::post('/marketing/pengadaan/send', 'MarketingController@sendOrder');
-	Route::get('/marketing/status-pemesanan', 'MarketingController@listStatusPemesanan');
+    Route::get('/marketing/status-pemesanan', 'MarketingController@listStatusPemesanan');
+    Route::get('/marketing/pengiriman', 'MarketingController@listPengiriman');
+    Route::get('/marketing/pengiriman/{id}', 'MarketingController@detailPengiriman');
+    Route::post('/marketing/pengiriman/send', 'MarketingController@kirimPengiriman');
 
     Route::get('/category', 'CategoryController@index')->name('category.index');
     Route::get('/category/create', 'CategoryController@create');

@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class MarketingController extends Controller
 {
@@ -11,7 +13,7 @@ class MarketingController extends Controller
     {
 
         $rs = DB::table('kotadistribusi')->get();
-        return view('admin.marketing.index',['city'=>$rs]);
+        return view('admin.marketing.index', ['city' => $rs]);
     }
 
     public function showByCity($city)
@@ -19,47 +21,86 @@ class MarketingController extends Controller
 
         $kota = $city;
         $rs = DB::table('orders')
-            ->where('status','Terkonfirmasi')
-            ->whereIn('namaCustomer', function ($query) use($city) {
+            ->where('status', 'Terkonfirmasi')
+            ->whereIn('namaCustomer', function ($query) use ($city) {
                 $query->select('customerName')
                     ->from('customer')
                     ->where('kotaDistribusi', $city);
             })
             ->groupBy('idPemesanan')
-            ->orderBy('idPemesanan','desc')
+            ->orderBy('idPemesanan', 'desc')
             ->get();
 
-            return view('admin.marketing.orderPerKota',['orders'=>$rs,'kota'=>$city]);
+        return view('admin.marketing.orderPerKota', ['orders' => $rs, 'kota' => $city]);
 
     }
 
-    public function detailOrder($city,$id){
-        $rs = DB::table('orders')->where('idPemesanan',$id)
-        ->get();
-        return view('admin.marketing.detailOrder',['detail'=>$rs,'city'=>$city]);
+    public function detailOrder($city, $id)
+    {
+        $rs = DB::table('orders')->where('idPemesanan', $id)
+            ->get();
+        return view('admin.marketing.detailOrder', ['detail' => $rs, 'city' => $city]);
     }
 
-    public function sendOrder(Request $req){
+    public function sendOrder(Request $req)
+    {
         $id = $req->idPemesanan;
-        DB::table('orders')->where('idPemesanan',$id)->update(['status'=>'Proses pembuatan']);
+        DB::table('orders')->where('idPemesanan', $id)->update(['status' => 'Menunggu di produksi']);
         return redirect("/marketing/pengadaan/$req->kota");
-      
+
     }
 
-    public function listStatusPemesanan(){
+    public function listStatusPemesanan()
+    {
         // $rs = DB::table('orders')->select('tanggal', function($query) {
         //     $query->select('kotaDistribusi')->from('customer')->whereRaw('customer.customerName=orders.namaCustomer');
         // })
         // ->groupBy('idPemesanan')
         // ->orderBy('idPemesanan','desc')
         // ->get();
-        
-        $rs= DB::table('orders')->select('tanggal', DB::raw("(select kotaDistribusi from customer where customerName=namaCustomer) as Kota "),'status')
-        ->groupBy('idPemesanan')
-        ->orderBy('idPemesanan','desc')
-        ->get();
 
-        return view('admin.marketing.statusPemesanan',['orders'=>$rs]);
-        
+        $rs = DB::table('orders')->select('tanggal', DB::raw("(select kotaDistribusi from customer where customerName=namaCustomer) as Kota "), 'status')
+            ->groupBy('idPemesanan')
+            ->orderBy('idPemesanan', 'desc')
+            ->get();
+
+        return view('admin.marketing.statusPemesanan', ['orders' => $rs]);
+
     }
+
+    public function listPengiriman()
+    {
+        $rs = DB::table('orders')->select('idPemesanan', 'tanggal', DB::raw("(select kotaDistribusi from customer where customerName=namaCustomer) as Kota "), 'status')
+            ->where('status', 'Menunggu Pengiriman')
+            ->groupBy('idPemesanan')
+            ->orderBy('idPemesanan', 'desc')
+            ->get();
+
+        return view('admin.marketing.pengiriman', ['orders' => $rs]);
+    }
+
+    public function detailPengiriman($id)
+    {
+        $rs = DB::table('orders')->select('idPemesanan', 'namaCustomer', 'tanggal', 'productName', 'size', 'quantity', 'totalPrice', 'promo', 'jenis', 'buktiPembayaran',
+            DB::raw("(select kotaDistribusi from customer where customerName=namaCustomer) as Kota "),
+            DB::raw("(select address from customer where customerName=namaCustomer) as Alamat "))
+            ->where('idPemesanan', $id)
+            ->get();
+        // return response()->json($rs);
+        return view('admin.marketing.detailPengiriman', ['detail' => $rs]);
+    }
+
+    public function kirimPengiriman(Request $req)
+    {
+        $data = [
+            'idPemesanan' => $req['idPemesanan'],
+            'address' => $req['alamat'],
+            'ongkirPengiriman' => $req['ongkir'],
+            'buktiPengiriman' => $req['buktiPengiriman'],
+
+        ];
+
+        echo json_encode($data);
+    }
+
 }
