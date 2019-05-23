@@ -25,3 +25,9 @@ Route::get('/produksi/order/detail/{id}', 'OrderController@apiOrderDetail');
 Route::get('/produksi/order/update-wait/{id}', 'OrderController@apiUpdateWait');
 Route::post('/produksi/order/list-proses-pembuatan', 'OrderController@apiGetProsesPembuatanList');
 Route::get('/produksi/order/update-done/{id}', 'OrderController@apiUpdateDone');
+Route::get('/produksi/in-production-list', 'OrderController@apiInProductionList');
+Route::get('/produksi/done/confirm/{id}', 'OrderController@apiDoneProduction');
+
+Route::get('/logistik/list-ready-pengiriman', 'OrderController@apiListReadyPengiriman');
+Route::get('/logistik/detail-ready-pengiriman/{id}', 'OrderController@apiReadyPengirimanDetail');
+Route::post('/logistik/send-ready-pengiriman', 'OrderController@apiReadyPengirimanSend');

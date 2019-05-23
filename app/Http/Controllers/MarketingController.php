@@ -71,7 +71,7 @@ class MarketingController extends Controller
     public function listPengiriman()
     {
         $rs = DB::table('orders')->select('idPemesanan', 'tanggal', DB::raw("(select kotaDistribusi from customer where customerName=namaCustomer) as Kota "), 'status')
-            ->where('status', 'Menunggu Pengiriman')
+            ->where('status', 'Proses pengiriman')
             ->groupBy('idPemesanan')
             ->orderBy('idPemesanan', 'desc')
             ->get();
@@ -92,15 +92,20 @@ class MarketingController extends Controller
 
     public function kirimPengiriman(Request $req)
     {
+        $path = $req->file('buktiPengiriman')->store('public/image/bukti/pengiriman');
+        $path = str_replace('public','storage',$path);
         $data = [
             'idPemesanan' => $req['idPemesanan'],
             'address' => $req['alamat'],
             'ongkirPengiriman' => $req['ongkir'],
-            'buktiPengiriman' => $req['buktiPengiriman'],
+            'buktiPengiriman' => $path,
 
         ];
 
-        echo json_encode($data);
+        DB::table('pengiriman')->insert($data);
+        DB::table('orders')->where('idPemesanan',$req['idPemesanan'])->update(['status'=>'Dalam pengiriman']);
+        return redirect('marketing/pengiriman');
+        // echo json_encode($data);
     }
 
 }

@@ -175,23 +175,66 @@ Sepatu Bordir.id| History Detail
                     <input type="file" name="buktiPembayaran" class="btn btn-block btn-light">
                     @else
                     <label for=""> Bukti pembayaran</label><br>
-                    <img style="height:100px; width:100px" src="{{asset($detail[0]->buktiPembayaran)}}" />
+                    <a href="{{asset($detail[0]->buktiPembayaran)}}" target="_blank">
+                    <img style="height:100px; width:100px" src="{{asset($detail[0]->buktiPembayaran)}}" /></a>
                     @endif
+
                 </div>
                 
                 <div class="col-sm-12 col-md-6 text-right">
                 @if($detail[0]->buktiPembayaran==null)
                 <label for=""> <br></label>
                     <input class="btn btn-lg btn-block btn-success text-uppercase" type="submit" value="Save">
-                    @endif
+                @endif
                 </div>
                
             </div>
+            @if($detail[0]->buktiPengiriman!=null)
+
+
+            <div class="row">
+                <div class="col-sm-12  col-md-6">
+                    <label for=""> Bukti pengiriman</label><br>
+                    <a href="{{asset($detail[0]->buktiPengiriman)}}" target="_blank">
+                    <img style="height:100px; width:100px" src="{{asset($detail[0]->buktiPengiriman)}}" /></a>
+                </div>
+                <div class="col-sm-12 col-md-6 text-right"> 
+                <label for=""> <br></label>
+                @if($detail[0]->status!='Sudah diterima')
+                    <input class="btn btn-lg btn-block btn-success text-uppercase" type="button" id="isConfirm" value="Terima Barang">
+                @endif
+                </div>
+            </div>
+
+            @endif
         </div>
     
     </div>
 </form>
 </div>
+
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Konfirmasi Barang di Terima</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Apakah anda yakin mengkonfirmasi bahwa pesanan telah di terima ? <br>
+         
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button id="spanId" type="button" class="btn btn-primary" onclick="" >Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
 @endsection
@@ -249,6 +292,20 @@ Sepatu Bordir.id| History Detail
         </div>
     </div>
 </footer>
+
+<script>
+$(document).ready(function(){
+    $('#isConfirm').on('click', function(){
+        var id = $("input[name='idPemesanan']").val();
+        var link = "location.href='terima/"+id+"'";
+        // alert(link);
+        $('#spanId').attr('onclick',link);
+        $('#exampleModal').modal('show');
+        // alert('anjing');
+    });
+});
+</script>
+
 @endsection
 
 

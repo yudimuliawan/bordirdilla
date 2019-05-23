@@ -121,7 +121,9 @@ class OrderController extends Controller
 
 
     public function showHistoryDetail($id){
-        $rs = DB::table('orders')->where('idPemesanan',$id)->get();
+        $rs = DB::table('orders')
+        ->selectRaw(" *, (select buktiPengiriman from pengiriman where orders.idPemesanan=pengiriman.idPemesanan) as buktiPengiriman")
+        ->where('idPemesanan',$id)->get();
         return view('order.historyDetails',['detail'=>$rs]);
     }
 
@@ -181,8 +183,50 @@ class OrderController extends Controller
     }
     
     public function apiUpdateDone($id){
-        DB::table('orders')->where('idPemesanan',$id)->update(['status'=>'Menunggu Pengiriman']);
+        DB::table('orders')->where('idPemesanan',$id)->update(['status'=>'Dalam proses produksi']);
         return response()->json(['status'=>'success']);
     }
+
+    public function apiListReadyPengiriman(){
+        $rs = DB::table('orders')->select('idPemesanan','tanggal')->where('status','Menunggu pengiriman')
+        ->groupBy('idPemesanan')->orderBy('idPemesanan','desc')
+        ->get();
+        return response()->json($rs);
+    }
+
+    public function apiReadyPengirimanDetail($id){
+        $rs = DB::table('orders')->select('idPemesanan', 'namaCustomer', 'tanggal', 'productName', 'size', 'quantity', 'totalPrice', 'promo', 'jenis', 'buktiPembayaran',
+            DB::raw("(select kotaDistribusi from customer where customerName=namaCustomer) as Kota "),
+            DB::raw("(select address from customer where customerName=namaCustomer) as Alamat "))
+            ->where('idPemesanan', $id)
+            ->get();
+
+        return response()->json($rs);
+    }
+
+    public function apiReadyPengirimanSend(Request $req){
+        $id = $req['idPemesanan'];
+        DB::table('orders')->where('idPemesanan',$id)->update(['status'=>'Proses pengiriman']);
+        return response()->json(['status'=>'success']);
+    }
+
+    public function receiveOrder($id){
+        DB::table('orders')->where('idPemesanan',$id)->update(['status'=>'Sudah diterima']);
+        return redirect('profile');
+    }
+
+    public function apiInProductionList(){
+        $rs=DB::table('orders')->select('idPemesanan','tanggal')
+        ->where('status','Dalam proses produksi')
+        ->groupBy('idPemesanan')->orderBy('idPemesanan','asc')->get();
+        
+        return response()->json($rs);
+    }
+
+    public function apiDoneProduction($id){
+        DB::table('orders')->where('idPemesanan',$id)->update(['status'=>'Menunggu pengiriman']);
+        return response()->json(['status'=>'success']);
+    }
+
 
 }

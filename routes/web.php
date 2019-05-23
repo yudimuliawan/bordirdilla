@@ -79,6 +79,7 @@ Route::group(['middleware' => ['sess']], function () {
     Route::post('/checkout', 'CheckoutController@store')->name('checkout.thanks');
 
     Route::get('/detailpesanan/{id}', 'OrderController@showHistoryDetail');
+    Route::get('/detailpesanan/terima/{id}', 'OrderController@receiveOrder');
     Route::post('/uploadbukti', 'OrderController@uploadBuktiBayar');
 
 });
