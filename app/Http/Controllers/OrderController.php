@@ -119,12 +119,38 @@ class OrderController extends Controller
         //
     }
 
+    public function history(Request $request)
+    {
+    	if($request->session()->has('user'))
+    	{
+            if(session('user')->type=='user'){
+            $orders = DB::table('orders')
+                    ->where('namaCustomer',session('user')->username)
+                    ->groupBy('idPemesanan')
+                    ->orderBy('idPemesanan','desc')
+                    ->get();
+
+            $user = DB::table('users')
+                    ->where('id', session('user')->id)
+                    ->first();
+
+    		return view('order.history', ['orders' => $orders, 'user'=>$user]);
+            }
+        }
+    }
+
+
 
     public function showHistoryDetail($id){
         $rs = DB::table('orders')
         ->selectRaw(" *, (select buktiPengiriman from pengiriman where orders.idPemesanan=pengiriman.idPemesanan) as buktiPengiriman")
         ->where('idPemesanan',$id)->get();
-        return view('order.historyDetails',['detail'=>$rs]);
+
+        $user = DB::table('users')
+        ->where('id', session('user')->id)
+        ->first();
+
+        return view('order.historyDetails',['detail'=>$rs, 'user'=>$user]);
     }
 
     public function uploadBuktiBayar(Request $req){
@@ -136,9 +162,8 @@ class OrderController extends Controller
             'buktiPembayaran'=>$path
         ];
         DB::table('orders')->where('idPemesanan',$id)->update($dataUpdate);
-        return redirect('/profile');
+        return redirect('/history');
     }
-
 
     public function apiGetOrder(){
         $rs = DB::table('orders')->where('status','Menunggu di produksi')
@@ -150,18 +175,12 @@ class OrderController extends Controller
     }
 
     public function apiOrderDetail($id){
-        // $rs = DB::table('orders')->where('idPemesanan',$id)
-        // ->orderBy('productName','asc')
-        // ->orderBy('size','asc')
-        // ->get();
-
         $rs = DB::table('orders')
-        // ->select('productName','size','quantity','totalPrice',DB::raw("(select category from categories where categoryId=(select categoryId from products where products.productName=orders.productName) as category "))
-        ->select('idPemesanan','productName','size','quantity','totalPrice',DB::raw("(select category from categories where categoryId = (select categoryId from products where orders.productName=products.productName) ) as category "))
-        ->where('idPemesanan',$id)
-        ->orderBy('productName','asc')
-        ->orderBy('size','asc')
-        ->get();
+				->select('idPemesanan','productName','namaCustomer', 'tanggal', 'status','size','quantity','totalPrice',DB::raw("(select category from categories where categoryId = (select categoryId from products where orders.productName=products.productName) ) as category "))
+				->where('idPemesanan',$id)
+				->orderBy('productName','asc')
+				->orderBy('size','asc')
+				->get();
 
         return response()->json($rs);
     }
@@ -227,6 +246,4 @@ class OrderController extends Controller
         DB::table('orders')->where('idPemesanan',$id)->update(['status'=>'Menunggu pengiriman']);
         return response()->json(['status'=>'success']);
     }
-
-
 }

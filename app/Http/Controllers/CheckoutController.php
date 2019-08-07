@@ -18,7 +18,11 @@ class CheckoutController extends Controller
     public function index()
     {
         $cartProducts = Cart::Content();
-        return view('checkout.index', ['cartProducts' => $cartProducts]);
+
+        $user = DB::table('users')
+        ->where('id', session('user')->id)
+        ->first(); 
+        return view('checkout.index', ['cartProducts' => $cartProducts, 'user'=>$user]);
     }
 
     /**
@@ -52,8 +56,10 @@ class CheckoutController extends Controller
             $det = date('dmYHis');
             $aidi = $det . $rdm;
             $jenis= $request->metode;
+            $totalPrice = 0;
             $params = array();
             foreach ($cartProducts as $cp) {
+                $totalPrice+=($cp->subtotal);
                 $params[] = [
                     'productId' => $cp->id,
                     'idPemesanan' => $aidi,
@@ -73,7 +79,7 @@ class CheckoutController extends Controller
 
                 // Cart::remove($cp->rowId);
             }
-
+            
             DB::table('orders')->insert($params);
 
             return view('checkout.thanks');

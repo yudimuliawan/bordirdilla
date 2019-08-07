@@ -22,5 +22,34 @@ class AdminController extends Controller
     	{
     		redirect('home.index');
     	}
+	}
+
+	public function customer(){
+        $rs = DB::table('customer')
+		->where('terkonfirmasi','belum')->get();
+		
+		$user = DB::table('users')
+	    	->where('id', session('user')->id)
+			->first(); 
+			
+        return view('admin.outside.index',compact('rs'), ['user'=>$user]);
+   
     }
+    public function detail($id){
+        $rs = DB::table('customer')
+		->where('customerId',$id)->first();
+		
+		$user = DB::table('users')
+	    	->where('id', session('user')->id)
+			->first(); 
+
+        return view('admin.outside.detail',compact('rs'), ['user'=>$user]);
+    }
+
+    public function konfirmasi(Request $req){
+        $id = $req->customerId;
+        DB::table('customer')->where('customerId',$id)->update(['terkonfirmasi'=>'sudah']);
+        return redirect()->route('outside.customer')->with('msg','Konfirmasi Berhasil');
+    }
+	
 }

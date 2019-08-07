@@ -21,7 +21,11 @@ class HomeController extends Controller
         $categories = DB::table('categories')
             ->get();
 
-        return view('home.index', ['products' => $products, 'categories' => $categories]);
+        $user = DB::table('users')
+	    	->where('id', session('user')->id)
+            ->first();  
+       
+        return view('home.index', ['products' => $products, 'categories' => $categories, 'user'=>$user]);
     }
 
     public function search(Request $request)
@@ -39,7 +43,7 @@ class HomeController extends Controller
     {
         $products = DB::table('products')
             ->where('categoryId', $id)
-            ->get();
+            ->paginate(6);
 
         $categories = DB::table('categories')
             ->get();
@@ -53,7 +57,11 @@ class HomeController extends Controller
         $product = DB::table('products')
             ->where('productId', $id)
             ->first();
+        
+        $user = DB::table('users')
+            ->where('id', session('user')->id)
+            ->first(); 
             
-        return view('home.product', ['product' => $product]);
+        return view('home.product', ['product' => $product, 'user'=>$user]);
     }
 }

@@ -13,7 +13,12 @@ class CartController extends Controller
     public function index()
     {
         $cartProducts=Cart::Content();
-        return view('cart.index',['cartProducts'=> $cartProducts]);
+
+        $user = DB::table('users')
+        ->where('id', session('user')->id)
+        ->first(); 
+
+        return view('cart.index',['cartProducts'=> $cartProducts, 'user'=>$user]);
     }
 
     public function add(Request $request)

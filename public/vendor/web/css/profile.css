@@ -1,0 +1,27 @@
+
+  .list-group-profile{
+    color: #222;
+  }
+
+  .form-group-profile{
+    color: #222;
+  }
+
+  .list-group-item-profile{
+    background:  #fff(250, 143, 4);
+    font-size: 14px;
+  }
+  
+  .form-group-button input{
+    padding: 10px 20px;
+    color: #fff;
+    font-size: 1em;
+    background: #212121;
+    text-decoration: none;
+  }
+
+  .form-group-button input:hover{
+    background: #ff4e00;
+  }
+  
+  

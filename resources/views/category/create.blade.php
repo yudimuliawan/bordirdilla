@@ -1,73 +1,159 @@
-
-@extends('layouts.productlist')
+@extends('layouts.admin')
 
 @section('pagetitle')
-Sepatu Bordir.id | Create New Category
+Sepatu Bordir.id | Admin
 @endsection
 
 @section('content')
+<!-- Navbar -->
+<body class="hold-transition skin-blue sidebar-mini">
+  <div class="wrapper">
+    <header class="main-header">
+      <!-- Logo -->
+      <a class="logo">
+        <!-- mini logo for sidebar mini 50x50 pixels -->
+        <span class="logo-mini"><b>A</b>LT</span>
+        <!-- logo for regular state and mobile devices -->
+        <span class="logo-lg"><b>Sepatu Bordir</b>ID</span>
+      </a>
 
-<div class="container bootstrap snippet">
-    <div class="col-md-12 col-sm-8 content">
-        <div class="row">
-            <div class="col-md-12">
-                <ol class="breadcrumb">
-                	<li class="active"><a href="{{route('home.index')}}">Home</a></li>
-                  	<li class="active"><a href="{{route('admin.index')}}">Profile</a></li>
-	                <li><a href="{{route('product.index')}}">Products</a></li>
-	                <li><a href="{{route('category.index')}}">Categories</a></li>
-	                <li class="active">Create new Category</li>
-                </ol>
-            </div>
+      <!-- Header Navbar: style can be found in header.less -->
+      <nav class="navbar navbar-static-top">
+        <!-- Sidebar toggle button-->
+        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+          <span class="sr-only">Toggle navigation</span>
+        </a>
+        <!-- Navbar Right Menu -->
+        <div class="navbar-custom-menu">
+          <ul class="nav navbar-nav">
+            <!-- User Account: style can be found in dropdown.less -->
+            <li class="dropdown user user-menu">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <span class="hidden-xs">{{$user->username}}</span>
+              </a>
+              <ul class="dropdown-menu">
+                <!-- User image -->
+                <li class="user-header">
+                  <img src="{{ asset('vendor/AdminLTE/dist/img/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
+                  <p>
+                  {{$user->username}} - Management Marketing
+                  </p>
+                </li>
+                <!-- Menu Footer-->
+                <li class="user-footer">
+                  <div class="pull-right">
+                    <a href="{{url('/logout')}}" class="btn btn-default btn-flat">Sign out</a>
+                  </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
         </div>
+      </nav>
+    </header>
+
+  <!-- Left side column. contains the logo and sidebar -->
+  <aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+      <!-- sidebar menu: : style can be found in sidebar.less -->
+      <ul class="sidebar-menu" data-widget="tree">
+        <li class="header">MAIN MENU</li>
+        <li class="active">
+          <a href="#">
+            <i class="fa fa-check"></i> <span>Kelola Produk</span>
+          </a>
+		</li>
+		<li>
+          <a href="#">
+            <i class="fa fa-user-plus"></i> <span>Konfirmasi Customer</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{url('marketing/status-pemesanan')}}">
+            <i class="fa fa-line-chart"></i> <span>Laporan Penjualan</span>
+          </a>
+        </li>
+        </li>  
+      </ul>
+    </section>
+    <!-- /.sidebar -->
+  </aside>
+
+	<!-- Content Wrapper. Contains page content -->
+	<div class="content-wrapper">
+		<!-- Content Header (Page header) -->
+    	<section class="content-header">
+			<h1>
+				KELOLA PRODUK
+			</h1>
+			<ol class="breadcrumb">
+				<li><a href="/admin"><i class="fa fa-check"></i>Home</a></li>
+        <li><a href="/category"><i class="fa fa-check"></i>Kelola Category</a></li>
+        <li class="active">Create New Category</li>
+			</ol>
+    	</section>
+  
+      <!-- Main content -->
+      <section class="content">  
         <div class="row">
+          <div class="main">
             <div class="col-md-12">
-                <div class="panel panel-info panel-shadow">
-                    <div class="panel-heading">
-                        <h3>
-                            <img class="img-circle img-thumbnail" src="https://bootdey.com/img/Content/user_3.jpg">
-                            Admin
-                        </h3>
-                        <h4>Create new Category</h4>
-                    </div>
-                    <div class="panel-body"> 
-                        <div class="table-responsive">
-                        	<form method="post" action="{{route('category.index')}}">
-                        		{{csrf_field()}}
-		                        <table class="table">
-		                            <thead>
-		                            <tr>
-		                                <th>Category name</th>
-		                            </tr>
-		                            </thead>
-		                            <tbody>
-		                                <tr>
-		                                    <td>
-		                                    	<input class="form-control" type="text" value="{{old('catname')}}" name="catname">
-		                                    </td>
-		                                <tr>
-											<td><input class="btn btn-primary" type="submit" value="Save"></td>
-											<td></td>
-		                                </tr>
-		                            </tbody>
-		                        </table>
+              <div class="box">
+                <div class="panel panel-info">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">Create New Category</h3>
+                  </div>
+                  <div class="panel-body"> 
+                    <div class="table-responsive">
+                      <form method="post" action="{{route('category.index')}}">
+                        {{csrf_field()}}
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th>Category name</th>
+                            </tr>
+                          </thead>
+		                      <tbody>
+                            <tr>
+                              <td>
+                                <input class="form-control" type="text" value="{{old('catname')}}" name="catname">
+                              </td>
+                            </tr>
+                            <tr>
+                              <td><input class="btn btn-primary" type="submit" value="Save"></td>
+                              <td></td>
+                            </tr>
+		                      </tbody>
+		                    </table>
+							@if($errors->any())
+							<ul>
+								@foreach($errors->all() as $error)
+								<li>{{$error}}</li>
+								@endforeach
+							</ul>
+							@endif
+		                  </form>
+	                  </div>
+                	</div>
+							  </div>
+						  </div>
+					  </div>
+				  </div>
+			  </div>
+    	</section>
+    <!-- /.content -->
+	
+  <!-- /.content-wrapper -->
+  </div>
 
-			                        @if($errors->any())
-										<ul>
-											@foreach($errors->all() as $error)
-												<li>{{$error}}</li>
-											@endforeach
-										</ul>
-									@endif
-
-		                        </form>
-	                    </div>
-                </div>
-                </div>
-                <a href="/product" class="btn btn-success"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp;Go back to Product List</a>
-            </div>
-        </div>
+  <footer class="main-footer">
+    <div class="pull-right hidden-xs">
+      <b>Version</b> 2.4.13
     </div>
-</div>
-
+    <strong>Copyright &copy; 2014-2019 <a href="https://adminlte.io">AdminLTE</a>.</strong> All rights
+    reserved.
+  </footer>
+ </body>
+</html>
 @endsection

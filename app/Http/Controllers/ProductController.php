@@ -14,13 +14,12 @@ class ProductController extends Controller
     {
         if(session('user')->type=='admin'){
     	$products = Product::all();
-    	//$products->load('category');
-    	// $products = DB::table('products')
-    	// 	->join('categories', 'products.categoryId', '=', 'categories.categoryId')
-    	// 	->get();
+        
+        $user = DB::table('users')
+	    	->where('id', session('user')->id)
+            ->first();  
 
-    	//dd($products);
-    	return view('product.index', ['products' => $products]);
+    	return view('product.index', ['products' => $products, 'user'=>$user]);
         }
         if(session('user')->type=='user')
         {
@@ -38,20 +37,28 @@ class ProductController extends Controller
 
     public function show($id)
     {
-    	$product = Product::find($id);
+        $product = Product::find($id);
+        
+        $user = DB::table('users')
+        ->where('id', session('user')->id)
+        ->first(); 
 
     	//dd($product->category->categoryName);
 
-    	return view('product.details', ['product' => $product]);
+    	return view('product.details', ['product' => $product, 'user'=>$user]);
     }
 
     public function create()
     {
     	//Category::all()
     	$categories = DB::table('categories')
-    		->get();
+            ->get();
+            
+        $user = DB::table('users')
+	    	->where('id', session('user')->id)
+            ->first();  
 
-    	return view('product.create', ['categories' => $categories]);
+    	return view('product.create', ['categories' => $categories, 'user'=>$user]);
     }
 
     public function edit($id)
@@ -60,13 +67,23 @@ class ProductController extends Controller
         $categories = DB::table('categories')
             ->get();
 
-    	return view('product.edit', ['product' => $product, 'categories' => $categories]);
+        $user = DB::table('users')
+            ->where('id', session('user')->id)
+            ->first(); 
+    
+
+    	return view('product.edit', ['product' => $product, 'categories' => $categories, 'user'=>$user]);
     }
 
     public function delete($id)
     {
-    	$product = Product::find($id);
-    	return view('product.delete', ['product' => $product]);
+        $product = Product::find($id);
+        
+        $user = DB::table('users')
+        ->where('id', session('user')->id)
+        ->first(); 
+
+    	return view('product.delete', ['product' => $product, 'user'=>$user]);
     }
 
     public function store(CreateProductRequest $request)

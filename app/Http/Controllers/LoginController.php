@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -33,15 +34,28 @@ class LoginController extends Controller
 
         $user = DB::table('users')
             ->where('username', $request->username)
-            ->where('password', $request->password)
             ->first();
+
+            
         if($user!=null){
 
             if($user->type=='user')
         	{
-        		$request->session()->put('user', $user);
-        		// session('user', $user);
-                return redirect()->route('home.index');
+                if(Hash::check($request->password,$user->password)){
+                    $userr = DB::table('customer')->select('terkonfirmasi')->where('customerName',$user->username)->first();
+                    if($userr->terkonfirmasi=='sudah'){
+                        $request->session()->put('user', $user);
+                        return redirect()->route('home.index');
+                    }else{
+                        $request->session()->flash('message', 'Maaf AKun anda belum di konfirmasi oleh Outside Sales');
+                        return redirect()->back();
+                    }
+                }else{
+                    $request->session()->flash('message', 'Password atau username salah');
+                    return redirect()->back();
+                }
+                
+        		
         	}
             if($user->type=='admin')
             {
@@ -63,6 +77,13 @@ class LoginController extends Controller
                 $request->session()->put('admin', $user);
                 // session('user', $user);
                 return redirect()->route('marketing.index');
+            }
+            if($user->type=='outside')
+            {
+                $request->session()->put('user', $user);
+                $request->session()->put('admin', $user);
+                // session('user', $user);
+                return redirect()->route('outside.index');
             }
         }
     	else

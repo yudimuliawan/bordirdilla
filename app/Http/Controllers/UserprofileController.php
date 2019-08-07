@@ -11,25 +11,12 @@ class UserprofileController extends Controller
 {
     public function show(Request $request)
     {
-    	if($request->session()->has('user'))
-    	{
-            if(session('user')->type=='user'){
-            $orders = DB::table('orders')
-                    ->where('namaCustomer',session('user')->username)
-                    ->groupBy('idPemesanan')
-                    ->orderBy('idPemesanan','desc')
-                    ->get();
+    	
+        $user = DB::table('users')
+	    	->where('id', session('user')->id)
+	    	->first();
 
-    		return view('userprofile.index', ['orders' => $orders]);
-        }else{
-            return redirect('/admin');
-        }
-    			
-    	}
-    	else
-    	{
-    		return redirect('/login');
-    	}
+    		return view('userprofile.index', ['user' => $user]);
     }
 
     public function edit($id)
@@ -44,6 +31,6 @@ class UserprofileController extends Controller
     	$u->username = $request->username;
     	$u->email = $request->email;
     	$u->save();
-    	return redirect('/logout');
+    	return redirect('/profile');
     }
 }

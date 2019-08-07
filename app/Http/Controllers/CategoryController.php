@@ -15,41 +15,49 @@ class CategoryController extends Controller
     	//$categories = DB::select($sql);
 
     	$categories = DB::table('categories')
-    		->get();
+			->get();
+			
+		$user = DB::table('users')
+	    	->where('id', session('user')->id)
+            ->first(); 
 
-    	return view('category.index', ['categories' => $categories]);
+    	return view('category.index', ['categories' => $categories, 'user'=>$user]);
     }
 
-    public function show($id)
-    {
-    	$category = DB::table('categories')
-    		->where('categoryId', $id)
-    		->first();
-
-    	return view('category.details', ['category' => $category]);
-    }
 
     public function create()
     {
-    	return view('category.create');
+		$user = DB::table('users')
+	    	->where('id', session('user')->id)
+			->first(); 
+			
+    	return view('category.create', ['user'=>$user]);
     }
 
     public function edit($id)
     {
     	$category = DB::table('categories')
     		->where('categoryId', $id)
-    		->first();
+			->first();
+			
+		$user = DB::table('users')
+	    	->where('id', session('user')->id)
+			->first(); 
 
-    	return view('category.edit', ['category' => $category]);
+    	return view('category.edit', ['category' => $category, 'user'=>$user]);
     }
 
     public function delete($id)
     {
     	$category = DB::table('categories')
     		->where('categoryId', $id)
-    		->first();
+			->first();
+			
+		$user = DB::table('users')
+	    	->where('id', session('user')->id)
+			->first(); 
 
-    	return view('category.delete', ['category' => $category]);
+    	return view('category.delete', ['category' => $category, 'user'=>$user]);
     }
 
     public function store(CreateCategoryRequest $request)

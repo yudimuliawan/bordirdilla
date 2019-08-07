@@ -4,133 +4,211 @@
 Sepatu Bordir.id | Accounting
 @endsection
 
-@section('header')
-<div style="width:100%;padding:2%;height: 10%;background-color: #e873dd;text-align: center;z-index: 2">
-    <h1 style="color:white">Enjoy Manage Your Business</h1>
-    <b>
-        <h1 style="color:white;font-weight: 700">SEPATU BORDIR.ID</h1>
-    </b>
-</div>
-@endsection
-
-@section('menubar')
-<div class="sidenav">
-    <div class="upper">
-        <h4>{{session('user')->username}}</h4>
-    </div>
-    <a href="{{url('accounting/konfirmasi')}}">Konfirmasi Pembayaran</a>
-    <a href="{{url('accounting/tagihan')}}">Tagihan</a>
-    <a href="#clients">Laporan Keuangan</a>
-    <a href="{{url('/logout')}}">Log Out</a>
-</div>
-@endsection
-
 @section('content')
-<div class="main">
-        <div class="container mb-4">
-                <form action="{{url('accounting/konfirmasi')}}" method="post" enctype="multipart/form-data">
-            <div class="row">
-                    {{csrf_field()}}
-                <div class="col-12">
-                    <div class="table-responsive">
-                        <h5 style="text-align:center">ID ({{$detail[0]->idPemesanan}})</h5>
-                        <input type="hidden" name="idPemesanan" value="{{$detail[0]->idPemesanan}}">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col"> </th>
-                                    
-                                    <th scope="col">Produk</th>
-                                    <th scope="col">Ukuran</th>
-                                    <th scope="col" class="text-center">Jumlah</th>
-                                    <th scope="col" class="text-right">Harga</th>
-                                    <th> </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php 
-                           
-                            $total=0;
-                         ?>
-                                @foreach($detail as $cp)
-                                <tr>
-                                    <td><img src="https://dummyimage.com/50x50/55595c/fff" /> </td>
-                                    
-                                    <td>{{$cp->productName}}</td>
-                                    <td>{{$cp->size}}</td>
-                                    <td>{{$cp->quantity}}</td>
-                                    <td class="text-right">Rp. {{$cp->totalPrice}}</td>
-                                    <!-- <td class="text-right"><a href="#" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> </a> </td> -->
-                                </tr>
-                                <?php 
-                                    $total=$total+($cp->totalPrice);
-                                 ?>
-                                 @endforeach 
-                                
-                                <tr>
-                                    <td></td>
-                                    
-                                    <td></td>
-                                    <td></td>
-                                    <td><strong>Total</strong></td>
-                                    <td class="text-right"><strong>Rp. {{$total}}</strong></td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                
-                                    <td></td>
-                                    <td></td>
-                                    <td><strong>Voucher</strong></td>
-                                    <td class="text-right"><strong>{{$detail[0]->promo}}%</strong></td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                
-                                    <td></td>
-                                    <td></td>
-                                    <td><strong>Jenis</strong></td>
-                                    <td class="text-right"><strong>{{$detail[0]->jenis}}</strong></td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                
-                                    <td></td>
-                                    <td></td>
-                                    <td><strong>Yang harus dibayar</strong></td>
-                                    <td class="text-right"><strong>Rp. {{$total-($total*($detail[0]->promo/100))}}</strong></td>
-                                    <input type="hidden" name="pay" value="{{$total-($total*($detail[0]->promo/100))}}">
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="col mb-2">
-                    <div class="row">
-                        <div class="col-sm-12  col-md-6">
-                            
-                            <label for=""> Bukti pembayaran</label><br>
-                            <a target="_blank" href="{{asset($detail[0]->buktiPembayaran)}}">
-                            <img style="height:100px; width:100px" src="{{asset($detail[0]->buktiPembayaran)}}" />
-                            </a>
-                            
-                        </div>
-                        
-                        <div class="col-sm-12 col-md-6 text-right">
-                        
-                        <label for=""> <br></label>
-                            <input class="btn btn-lg btn-block btn-success text-uppercase" type="submit" value="Konfirmasi">
-                         
-                        </div>
-                       
-                    </div>
-                </div>
-            
-            </div>
-        </form>
+<!-- Navbar -->
+<body class="hold-transition skin-blue sidebar-mini">
+  <div class="wrapper">
+    <header class="main-header">
+    <!-- Logo -->
+      <a href="index2.html" class="logo">
+        <!-- mini logo for sidebar mini 50x50 pixels -->
+        <span class="logo-mini"><b>A</b>LT</span>
+        <!-- logo for regular state and mobile devices -->
+        <span class="logo-lg"><b>Sepatu Bordir</b>ID</span>
+      </a>
+      <!-- Header Navbar: style can be found in header.less -->
+      <nav class="navbar navbar-static-top">
+        <!-- Sidebar toggle button-->
+        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+          <span class="sr-only">Toggle navigation</span>
+        </a>
+        <!-- Navbar Right Menu -->
+        <div class="navbar-custom-menu">
+          <ul class="nav navbar-nav">
+            <!-- User Account: style can be found in dropdown.less -->
+            <li class="dropdown user user-menu">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <span class="hidden-xs">{{$user->username}}</span>
+              </a>
+              <ul class="dropdown-menu">
+                <!-- User image -->
+                <li class="user-header">
+                  <img src="{{ asset('vendor/AdminLTE/dist/img/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
+                  <p>
+                  {{$user->username}} - Management Accounting
+                  </p>
+                </li>
+                <!-- Menu Footer-->
+                <li class="user-footer">
+                  <div class="pull-right">
+                    <a href="{{url('/logout')}}" class="btn btn-default btn-flat">Sign out</a>
+                  </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
         </div>
+      </nav>
+    </header>
 
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="main-sidebar">
+      <!-- sidebar: style can be found in sidebar.less -->
+      <section class="sidebar">
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu" data-widget="tree">
+          <li class="header">MAIN MENU</li>
+          <li class="active">
+            <a href="#">
+              <i class="fa fa-check"></i> <span>Konfirmasi Pembayaran</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{url('marketing/status-pemesanan')}}">
+              <i class="fa fa-line-chart"></i> <span>Laporan Keuangan</span>
+            </a>
+          </li>
+          </li>  
+        </ul>
+      </section>
+      <!-- /.sidebar -->
+    </aside>
 
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <h1>
+          KONFIRMASI PEMBAYARAN
+        </h1>
+        <ol class="breadcrumb">
+          <li><a href="/accounting"><i class="fa fa-check"></i>Konfirmasi Pembayaran</a></li>
+          <li class="active">Detail Konfirmasi</li>
+        </ol>
+      </section>
 
-</div>
+      <!-- Main content -->
+      <section class="content">  
+        <div class="row">
+          <div class="main">
+            <div class="col-md-12">
+              <div class="box">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Detail Pemesanan Sepatu : ID ({{$detail[0]->idPemesanan}}) </h3>
+                  <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                  </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                  <div class="box box-info">
+                    <div class="container">
+                      <form action="{{url('accounting/konfirmasi')}}" method="post" enctype="multipart/form-data">
+                        <div class="row">
+                            {{csrf_field()}}
+                            <div class="col-5">
+                              <div class="table-responsive">
+                                <input type="hidden" name="idPemesanan" value="{{$detail[0]->idPemesanan}}">
+                                <table class="table">
+                                  <thead>
+                                    <tr>
+                                      <th scope="col">Produk</th>
+                                      <th scope="col">Ukuran</th>
+                                      <th scope="col" >Jumlah</th>
+                                      <th scope="col" >Harga</th>
+                                      <th> </th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <?php 
+                                    $total=0;
+                                    ?>
+                                    @foreach($detail as $cp)
+                                    <tr>
+                                      <td>{{$cp->productName}}</td>
+                                      <td>{{$cp->size}}</td>
+                                      <td>{{$cp->quantity}}</td>
+                                      <td>Rp. {{$cp->totalPrice}}</td>
+                                      <!-- <td class="text-right"><a href="#" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> </a> </td> -->
+                                    </tr>
+                                    <?php 
+                                      $total=$total+($cp->totalPrice);
+                                    ?>
+                                    @endforeach 
+                                    <tr>
+                                      <td></td>
+                                      <td></td>
+                                      <td><strong>Total</strong></td>
+                                      <td><strong>Rp. {{$total}}</strong></td>
+                                    </tr>
+                                    <tr>
+                                      <td></td>
+                                      <td></td>
+                                      <td><strong>Voucher</strong></td>
+                                      <td><strong>{{$detail[0]->promo}}%</strong></td>
+                                    </tr>
+                                    <tr>
+                                      <td></td>
+                                      <td></td>
+                                      <td><strong>Jenis</strong></td>
+                                      <td><strong>{{$detail[0]->jenis}}</strong></td>
+                                    </tr>
+                                    <tr>
+                                      <td></td>
+                                      <td></td>
+                                      <td><strong>Yang harus dibayar</strong></td>
+                                      <td><strong>Rp. {{$total-($total*($detail[0]->promo/100))}}</strong></td>
+                                      <input type="hidden" name="pay" value="{{$total-($total*($detail[0]->promo/100))}}">
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                            <div class="col mb-2">
+                                <div class="row">
+                                    <div class="col-sm-12  col-md-6">
+                                      <label for=""> Bukti pembayaran</label><br>
+                                      <a target="_blank" href="{{asset($detail[0]->buktiPembayaran)}}">
+                                      <img style="height:100px; width:100px" src="{{asset($detail[0]->buktiPembayaran)}}" />
+                                      </a>   
+                                    </div>
+                                    <div class="col-sm-5 col-md-5 text-right">
+                                      <label for=""> <br></label>
+                                      <input class="btn btn-lg btn-block btn-success text-uppercase" type="submit" value="Konfirmasi">
+                                    </div>  
+                                </div>
+                            </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <!-- ./box-body -->
+                <div class="box-footer">
+                  <div class="row">
+               
+                  </div>
+                  <!-- /.row -->
+                </div>
+                <!-- /.box-footer -->
+              </div>
+              <!-- /.box -->
+            </div>
+            <!-- /.col -->
+          </div>
+        </div>
+        <!-- /.row -->
+      </section>
+    <!-- /.content-wrapper -->
+    </div>
 
+    <!--Navbar-->
+    <footer class="main-footer">
+      <div class="pull-right hidden-xs">
+        <b>Version</b> 2.4.13
+      </div>
+      <strong>Copyright &copy; 2014-2019 <a href="https://adminlte.io">AdminLTE</a>.</strong> All rights reserved.
+    </footer>   
+</body>
 @endsection

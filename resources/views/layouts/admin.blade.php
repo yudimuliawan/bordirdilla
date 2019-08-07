@@ -2,89 +2,71 @@
 <html>
 
 <head>
+  <title>@yield('pagetitle')</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>AdminLTE 2 | Dashboard</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.7 -->
+  <link rel="stylesheet" href="{{ asset('vendor/AdminLTE/bower_components/bootstrap/dist/css/bootstrap.min.css') }}">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{{ asset('vendor/AdminLTE/bower_components/font-awesome/css/font-awesome.min.css') }}">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="{{ asset('vendor/AdminLTE/bower_components/Ionicons/css/ionicons.min.css') }}">
+  <!-- jvectormap -->
+  <link rel="stylesheet" href="{{ asset('vendor/AdminLTE/bower_components/jvectormap/jquery-jvectormap.css') }}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{{ asset('vendor/AdminLTE/dist/css/AdminLTE.min.css') }}">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+  folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="{{ asset('vendor/AdminLTE/dist/css/skins/_all-skins.min.css') }}">
 
-    <title>@yield('pagetitle')</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
 
-    <style>
-        body {
-            font-family: "Lato", sans-serif;
-        }
-
-        .sidenav {
-            height: 100%;
-            width: 15%;
-            position: fixed;
-            /* z-index: 0; */
-            top: 0;
-            left: 0;
-            background-color: #f7e4f0;
-            overflow-x: hidden;
-            padding-top: 20px;
-        }
-
-        .upper{
-            text-align: center;
-            background-color: #ef8e9c;
-            width: 100%;
-            height: 10%;
-            
-        }
-        .upper h4{
-            text-transform: uppercase;
-        }
-
-        .sidenav a {
-            padding: 6px 8px 6px 16px;
-            text-decoration: none;
-            /* font-size: 25px; */
-            color: #818181;
-            display: block;
-        }
-
-        .sidenav a:hover {
-            color: #1b1313;
-        }
-
-        .main {
-            margin-left: 15%;
-            /* Same as the width of the sidenav */
-            /* font-size: 28px; */
-            /* Increased text to enable scrolling */
-            padding: 0px 10px;
-        }
-
-        @media screen and (max-height: 450px) {
-            .sidenav {
-                padding-top: 15px;
-            }
-
-            .sidenav a {
-                font-size: 18px;
-            }
-        }
-    </style>
-    @yield('styles')
+  <!-- Google Font -->
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
 
 <body>
+  @yield('header')
+  <!-- Header -->
+          
+  @yield('menubar')
 
-    @yield('header')
-    @yield('menubar')
-
-    @yield('content')
-
-
-    @yield('footer')
-    @yield('scripts')
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
-    </script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
-    </script>
+  @yield('content')
 </body>
+
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 3 -->
+<script src="{{ asset('vendor/AdminLTE/bower_components/jquery/dist/jquery.min.js') }}"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="{{ asset('vendor/AdminLTE/bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+<!-- FastClick -->
+<script src="{{ asset('vendor/AdminLTE/bower_components/fastclick/lib/fastclick.js') }}"></script>
+<!-- AdminLTE App -->
+<script src="{{ asset('vendor/AdminLTE/dist/js/adminlte.min.js') }}"></script>
+<!-- Sparkline -->
+<script src="{{ asset('vendor/AdminLTE/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js') }}"></script>
+<!-- jvectormap  -->
+<script src="{{ asset('vendor/AdminLTE/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js') }}"></script>
+<script src="{{ asset('vendor/AdminLTE/plugins/jvectormap/jquery-jvectormap-world-mill-en.js') }}"></script>
+<!-- SlimScroll -->
+<script src="{{ asset('vendor/AdminLTE/bower_components/jquery-slimscroll/jquery.slimscroll.min.js') }}"></script>
+<!-- ChartJS -->
+<script src="{{ asset('vendor/AdminLTE/bower_components/chart.js/Chart.js') }}"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="{{ asset('vendor/AdminLTE/dist/js/pages/dashboard2.js') }}"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="{{ asset('vendor/AdminLTE/dist/js/demo.js') }}"></script>
 
 </html>

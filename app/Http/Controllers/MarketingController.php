@@ -6,14 +6,23 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
+
 class MarketingController extends Controller
 {
     //
     public function index()
     {
 
-        $rs = DB::table('kotadistribusi')->get();
-        return view('admin.marketing.index', ['city' => $rs]);
+        $rs = DB::table('kotadistribusi')
+        ->select('*',DB::raw("(select COUNT(DISTINCT idPemesanan) from orders where namaCustomer in (select customerName from customer where kotaDistribusi = kotadistribusi.namaKota) and status = 'Terkonfirmasi') as counter"))
+        ->get();
+
+        $user = DB::table('users')
+	    	->where('id', session('user')->id)
+            ->first();
+
+        return view('admin.marketing.index', ['city' => $rs, 'user'=>$user]);
+        // return response()->json($rs);
     }
 
     public function showByCity($city)
@@ -31,7 +40,11 @@ class MarketingController extends Controller
             ->orderBy('idPemesanan', 'desc')
             ->get();
 
-        return view('admin.marketing.orderPerKota', ['orders' => $rs, 'kota' => $city]);
+        $user = DB::table('users')
+	    	->where('id', session('user')->id)
+            ->first();
+
+        return view('admin.marketing.orderPerKota', ['orders' => $rs, 'kota' => $city, 'user'=>$user]);
 
     }
 
@@ -39,7 +52,12 @@ class MarketingController extends Controller
     {
         $rs = DB::table('orders')->where('idPemesanan', $id)
             ->get();
-        return view('admin.marketing.detailOrder', ['detail' => $rs, 'city' => $city]);
+
+        $user = DB::table('users')
+	    	->where('id', session('user')->id)
+            ->first();  
+
+        return view('admin.marketing.detailOrder', ['detail' => $rs, 'city' => $city, 'user'=>$user]);
     }
 
     public function sendOrder(Request $req)
@@ -52,19 +70,16 @@ class MarketingController extends Controller
 
     public function listStatusPemesanan()
     {
-        // $rs = DB::table('orders')->select('tanggal', function($query) {
-        //     $query->select('kotaDistribusi')->from('customer')->whereRaw('customer.customerName=orders.namaCustomer');
-        // })
-        // ->groupBy('idPemesanan')
-        // ->orderBy('idPemesanan','desc')
-        // ->get();
-
-        $rs = DB::table('orders')->select('tanggal', DB::raw("(select kotaDistribusi from customer where customerName=namaCustomer) as Kota "), 'status')
+        $rs = DB::table('orders')->select('tanggal', DB::raw("(select kotaDistribusi from customer where customerName=namaCustomer) as Kota "), 'status', 'idPemesanan', 'namaCustomer')
             ->groupBy('idPemesanan')
             ->orderBy('idPemesanan', 'desc')
             ->get();
 
-        return view('admin.marketing.statusPemesanan', ['orders' => $rs]);
+        $user = DB::table('users')
+	    	->where('id', session('user')->id)
+            ->first();  
+
+        return view('admin.marketing.statusPemesanan', ['orders' => $rs, 'user'=>$user]);
 
     }
 
@@ -75,8 +90,12 @@ class MarketingController extends Controller
             ->groupBy('idPemesanan')
             ->orderBy('idPemesanan', 'desc')
             ->get();
+        
+        $user = DB::table('users')
+	    	->where('id', session('user')->id)
+            ->first();  
 
-        return view('admin.marketing.pengiriman', ['orders' => $rs]);
+        return view('admin.marketing.pengiriman', ['orders' => $rs, 'user'=>$user]);
     }
 
     public function detailPengiriman($id)
@@ -86,8 +105,12 @@ class MarketingController extends Controller
             DB::raw("(select address from customer where customerName=namaCustomer) as Alamat "))
             ->where('idPemesanan', $id)
             ->get();
+
+        $user = DB::table('users')
+	    	->where('id', session('user')->id)
+            ->first();  
         // return response()->json($rs);
-        return view('admin.marketing.detailPengiriman', ['detail' => $rs]);
+        return view('admin.marketing.detailPengiriman', ['detail' => $rs, 'user'=>$user]);
     }
 
     public function kirimPengiriman(Request $req)

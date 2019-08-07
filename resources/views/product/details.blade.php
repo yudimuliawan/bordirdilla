@@ -1,85 +1,169 @@
-
-@extends('layouts.productlist')
+@extends('layouts.admin')
 
 @section('pagetitle')
-Sepatu Bordir.id | Product information
+Sepatu Bordir.id | Admin
 @endsection
 
 @section('content')
+<!-- Navbar -->
+<body class="hold-transition skin-blue sidebar-mini">
+  <div class="wrapper">
+    <header class="main-header">
+      <!-- Logo -->
+      <a class="logo">
+        <!-- mini logo for sidebar mini 50x50 pixels -->
+        <span class="logo-mini"><b>A</b>LT</span>
+        <!-- logo for regular state and mobile devices -->
+        <span class="logo-lg"><b>Sepatu Bordir</b>ID</span>
+      </a>
 
-<div class="container bootstrap snippet">
-    <div class="col-md-12 col-sm-8 content">
-        <div class="row">
-            <div class="col-md-12">
-                <ol class="breadcrumb">
-                	<li class="active"><a href="{{route('home.index')}}">Home</a></li>
-                	<li class="active"><a href="/admin">Profile</a></li>
-                  <li><a href="/product">Back to list</a></li>
-                  <li class="active">Product details</li>
-                </ol>
-            </div>
+      <!-- Header Navbar: style can be found in header.less -->
+      <nav class="navbar navbar-static-top">
+        <!-- Sidebar toggle button-->
+        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+          <span class="sr-only">Toggle navigation</span>
+        </a>
+        <!-- Navbar Right Menu -->
+        <div class="navbar-custom-menu">
+          <ul class="nav navbar-nav">
+            <!-- User Account: style can be found in dropdown.less -->
+            <li class="dropdown user user-menu">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <span class="hidden-xs">{{$user->username}}</span>
+              </a>
+              <ul class="dropdown-menu">
+                <!-- User image -->
+                <li class="user-header">
+                  <img src="{{ asset('vendor/AdminLTE/dist/img/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
+                  <p>
+                  {{$user->username}} - Management Marketing
+                  </p>
+                </li>
+                <!-- Menu Footer-->
+                <li class="user-footer">
+                  <div class="pull-right">
+                    <a href="{{url('/logout')}}" class="btn btn-default btn-flat">Sign out</a>
+                  </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="panel panel-info panel-shadow">
-                    <div class="panel-heading">
-                        <h3>
-                            <img class="img-circle img-thumbnail" src="https://bootdey.com/img/Content/user_3.jpg">
-                            Admin
-                        </h3>
-                        <h4><a href="/product/{{$product->productId}}/edit">Edit product</a></h4>
-                    </div>
-                    <div class="panel-body"> 
-                        <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                            	<th>Picture</th>
-                                <th>Product Id</th>
-                                <th>Product name</th>
-                                <th>Price</th>
-                                <th>Description</th>
-                                <th>Qty</th>
-                                <th>Catagory Name</th>                                
-                                <th>Option</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                	<td height="10%" width="10%">
-                                    	<img src="https://static.acer.com/up/Resource/Acer/Home/Product_Highlights/20180112/swift_5.png" height="100%" width="100%">
-                                    </td>
-                                    <td>
-                                    	<label>{{$product->productId}}</label>
-                                    </td>
-                                    <td>
-                                    	<label>{{$product->productName}}</label>
-                                    </td>
-                                    <td>
-                                        <label>{{$product->price}}</label>
-                                    </td>
-                                    <td>
-                                    	<label>{{$product->description}}</label>
-                                    </td>
-                                    <td>
-                                    	<label>{{$product->quantity}}</label>
-                                    </td>
-                                    <td>
-                                    	<label>{{$product->category->categoryName}}</label>
-                                    </td>
-                                	<td>
-                                    	<i class="fa fa-pencil"><a href="/product/{{$product->productId}}/edit"> Edit product</a></i>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+      </nav>
+    </header>
+
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <!-- sidebar menu: : style can be found in sidebar.less -->
+            <ul class="sidebar-menu" data-widget="tree">
+                <li class="header">MAIN MENU</li>
+                <li class="active">
+                    <a href="#">
+                        <i class="fa fa-check"></i> <span>Kelola Produk</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fa fa-user-plus"></i> <span>Konfirmasi Customer</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{url('marketing/status-pemesanan')}}">
+                        <i class="fa fa-line-chart"></i> <span>Laporan Penjualan</span>
+                    </a>
+                </li>
+                </li>  
+            </ul>
+        </section>
+    <!-- /.sidebar -->
+    </aside>
+
+	<!-- Content Wrapper. Contains page content -->
+	<div class="content-wrapper">
+		<!-- Content Header (Page header) -->
+    	<section class="content-header">
+			<h1>
+				KELOLA PRODUK
+			</h1>
+			<ol class="breadcrumb">
+				<li><a href="/admin"><i class="fa fa-check"></i>Home</a></li>
+                <li><a href="/product"><i class="fa fa-check"></i>Kelola Produk</a></li>
+          		<li class="active">Detail Produk</li>
+			</ol>
+    	</section>
+  
+		<!-- Main content -->
+		<section class="content">  
+			<div class="row">
+				<div class="main">
+					<div class="col-md-12">
+						<div class="box">
+							<div class="panel panel-info">
+								<div class="panel-heading">
+									<h3 class="panel-title">Detail Product</h3>
+								</div>
+								<div class="panel-body"> 
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Picture</th>
+                                                    <th>Product Id</th>
+                                                    <th>Product name</th>
+                                                    <th>Price</th>
+                                                    <th>Description</th>
+                                                    <th>Catagory Name</th>                                
+                                                    <th>Option</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td height="5%" width="20%">
+                                                        <img src="{{asset('vendor/colo/images/product_5.png') }}" height="100%" width="100%">
+                                                    </td>
+                                                    <td>
+                                                        <label>{{$product->productId}}</label>
+                                                    </td>
+                                                    <td>
+                                                        <label>{{$product->productName}}</label>
+                                                    </td>
+                                                    <td>
+                                                        <label>{{$product->price}}</label>
+                                                    </td>
+                                                    <td>
+                                                        <label>{{$product->description}}</label>
+                                                    </td>
+                                                    <td>
+                                                        <label>{{$product->category->categoryName}}</label>
+                                                    </td>
+                                                    <td>
+                                                        <i class="fa fa-pencil"><a href="/product/{{$product->productId}}/edit"> Edit product</a></i>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                </div>
-                <a href="/product" class="btn btn-success"><span class="glyphicon glyphicon-arrow-left"></span>&nbsp;Go back to Product List</a>
-            </div>
-        </div>
+            </div>      
+        </section>
+        <!-- /.content -->
+
+    <!-- /.content-wrapper -->
     </div>
-</div>
 
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs">
+        <b>Version</b> 2.4.13
+        </div>
+        <strong>Copyright &copy; 2014-2019 <a href="https://adminlte.io">AdminLTE</a>.</strong> All rights
+        reserved.
+    </footer>
+ </body>
+</html>
 @endsection

@@ -1,22 +1,20 @@
 @extends('layouts.user')
 
 @section('content')
-<div class='container'>
-    <div class='row' style='padding-top:25px; padding-bottom:25px;'>
-        <div class='col-md-12'>
-            <div id='mainContentWrapper'>
-                <div class="col-md-8 col-md-offset-2">
-                    <h2 style="text-align: center;">
+<div class="banner-top container-fluid" id="home">
+	<div class="container mb-4">
+        <div class='row' style='padding-top:25px; padding-bottom:25px;'>
+                <div class='col-md-12'>
+                    <div id='mainContentWrapper'>
+                        <h2 style="text-align: center;">
                         Selesaikan Pesanan
-                    </h2>
-                    <hr />
-                    <a href="{{route('home.index')}}" class="btn btn-info" style="width: 100%;">Tambah Produk</a>
-                    <hr />
-                    <div class="shopping_cart">
-                        <form class="form-horizontal" method="post" role="form" id="payment-form">
-
+                        </h2>
+                        <hr/>
+                            <a href="{{route('home.index')}}" class="btn btn-info" style="width: 100%;">Tambah Produk</a>
+                        <hr/>
+                        <div class="shopping_cart">
+                            <form class="form-horizontal" method="post" role="form" id="payment-form">
                             {{csrf_field()}}
-
                             <div class="panel-group" id="accordion">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
@@ -31,19 +29,6 @@
                                             <div class="items">
                                                 <div class="col-md-9">
                                                     <table class="table table-striped">
-                                                        <tr>
-                                                            
-                                                                <div class="form-group">
-                                                                    <label>Metode Pembayaran</label>
-                                                                    <select name="metode" class="form-control"
-                                                                        id="exampleFormControlSelect1">
-
-                                                                        <option>Tunai</option>
-                                                                        <option>Kredit</option>
-
-                                                                    </select>
-                                                                </div>
-                                                        </tr>
                                                         <tr>
                                                             <td>
                                                                 <ul>
@@ -93,8 +78,12 @@
 
                     </div>
                 </div>
-                </form>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    @endsection
+
+
+@endsection
